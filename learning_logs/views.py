@@ -7,6 +7,13 @@ from django.contrib.auth.decorators import login_required
 # from django.db.models.query import QuerySet
 
 
+# my owner_check_function
+def check_topic_owner(topic, req):
+    """owner check bro"""
+    if topic.owner != req.user:
+        raise Http404
+
+
 # Create your views here.
 def index(request):
     """The home page for learning logs"""
@@ -23,8 +30,7 @@ def topics(req: HttpRequest):
 @login_required
 def topic(req, topic_id):
     topic = Topic.objects.get(id=topic_id)
-    if req.user != topic.owner:
-        raise Http404
+    check_topic_owner(topic, req)
     entires = topic.entry_set.order_by("-date_added")
     context = {"topic": topic, "entries": entires}
     return render(req, "learning_logs/topic.html", context)
@@ -50,7 +56,7 @@ def new_topic(req: HttpRequest):
 @login_required
 def new_entry(req: HttpRequest, topic_id):
     topic = Topic.objects.get(id=topic_id)
-
+    check_topic_owner(topic, req)
     if req.method != "POST":
         form = NewEntry()
     else:
@@ -69,8 +75,8 @@ def new_entry(req: HttpRequest, topic_id):
 def edit_entry(req: HttpRequest, entry_id):
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
-    if req.user != topic.owner:
-        raise Http404
+    check_topic_owner(topic, req)
+
     if req.method != "POST":
         form = NewEntry(instance=entry)
     else:
