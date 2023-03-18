@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Topic, Entry
 from .forms import NewTopic, NewEntry
-from django.http import HttpRequest
+from django.http import HttpRequest, Http404
+from django.contrib.auth.decorators import login_required
 
 # from django.db.models.query import QuerySet
 
@@ -12,32 +13,41 @@ def index(request):
     return render(request, "learning_logs/index.html")
 
 
-def topics(req):
-    topics = Topic.objects.order_by("date")
+@login_required
+def topics(req: HttpRequest):
+    topics = Topic.objects.filter(owner=req.user).order_by("date")
     context = {"topics": topics}
     return render(req, "learning_logs/topics.html", context)
 
 
+@login_required
 def topic(req, topic_id):
     topic = Topic.objects.get(id=topic_id)
+    if req.user != topic.owner:
+        raise Http404
     entires = topic.entry_set.order_by("-date_added")
     context = {"topic": topic, "entries": entires}
     return render(req, "learning_logs/topic.html", context)
 
 
+@login_required
 def new_topic(req: HttpRequest):
     if req.method != "POST":
         form = NewTopic()
     else:
         form = NewTopic(data=req.POST)
         form.is_valid()
-        form.save()
+        new_topic = form.save(commit=False)
+        new_topic.owner = req.user
+        new_topic.save()
+
         return redirect("learning_logs:topics")
 
     context = {"form": form}
     return render(req, "learning_logs/new_topic.html", context)
 
 
+@login_required
 def new_entry(req: HttpRequest, topic_id):
     topic = Topic.objects.get(id=topic_id)
 
@@ -55,9 +65,12 @@ def new_entry(req: HttpRequest, topic_id):
     return render(req, "learning_logs/new_entry.html", context)
 
 
+@login_required
 def edit_entry(req: HttpRequest, entry_id):
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
+    if req.user != topic.owner:
+        raise Http404
     if req.method != "POST":
         form = NewEntry(instance=entry)
     else:
