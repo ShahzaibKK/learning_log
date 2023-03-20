@@ -1,113 +1,16 @@
-{% extends 'learning_logs/base.html' %} {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-  <title>KT Realtor & Builder</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      line-height: 1.5;
-      background-color: #f5f5f5;
-      color: #666;
-    }
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    header {
-      background-color: #FFF;
-      border-bottom: 1px solid #e5e5e5;
-      padding: 20px;
-    }
-    #branding h1 {
-      font-size: 24px;
-      color: #666;
-      margin: 0;
-    }
-    #navigation {
-      background-color: #444;
-      color: #FFF;
-    }
-    #navigation ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      overflow: hidden;
-    }
-    #navigation li {
-      float: left;
-    }
-    #navigation a {
-      display: block;
-      padding: 10px 20px;
-      color: #FFF;
-      text-decoration: none;
-    }
-    #navigation a:hover {
-      background-color: #666;
-    }
-    #main {
-      padding: 20px;
-      text-align: justify;
-    }
-    #main h2 {
-      font-size: 28px;
-      margin: 0 0 20px;
-    }
-    #main p {
-      margin: 0 0 10px;
-    }
-    #sidebar {
-      float: right;
-      width: 30%;
-      padding: 20px;
-    }
-    #footer {
-      clear: both;
-      background-color: #444;
-      color: #FFF;
-      padding: 20px;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <div id="branding">
-        <h1>KT Realtor & Builder</h1>
-      </div>
-      <nav id="navigation">
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Services</a></li>
-          <li><a href="#">Contact Us</a></li>
-        </ul>
-      </nav>
-    </header>
-    <main id="main">
-      <h2>Welcome to KT Realtor & Builder</h2>
-      <p>We are a full-service real estate and building company, specializing in buying, selling, and building homes.</p>
-      <p>Our experienced agents can help you find the perfect home for you and your family. We also have a team of builders that can help you design and build your dream home.</p>
-      <p>For more information, please contact us today.</p>
-    </main>
-    <aside id="sidebar">
-      <h2>Our Services</h2>
-      <ul>
-        <li>Buying and Selling Homes</li>
-        <li>Home Design and Building</li>
-        <li>Property Management</li>
-        <li>Investment Opportunities</li>
-      </ul>
-    </aside>
-    <footer id="footer">
-      <p>&copy; 2023 KT Realtor & Builder</p>
-    </footer>
+{% extends 'learning_logs/base.html' %}
+
+{% block page_header %}
+  <div class="p-3 mb-4 bg-light border rounded-3">
+    <div class="container-fluid py-4">
+      <h1 class="display-3">Track your learning.</h1>
+      
+      <p class="lead">Make your own Learning Log, and keep a list of the
+      topics you're learning about. Whenever you learn something new
+      about a topic, make an entry summarizing what you've learned.</p>
+
+      <a class="btn btn-primary btn-lg mt-1"
+          href="{% url 'accounts:register' %}">Register &raquo;</a>
+    </div>
   </div>
-</body>
-</html>
-
-
-{% endblock content %}
+{% endblock page_header %}
